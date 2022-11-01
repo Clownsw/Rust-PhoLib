@@ -1,6 +1,6 @@
 [package]
 name          = "pholib"
-description   = "Potentially helpful objects library, because why not."
+description   = "Potentially helpful objects that break the rules of the borrow checker, because why not."
 version       = "0.1.0"
 authors       = ["Totobird Creations"]
 keywords      = ["unsafe", "mut", "library"]
