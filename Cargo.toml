@@ -4,7 +4,7 @@ description   = "Potentially helpful objects library, because why not."
 version       = "0.1.0"
 authors       = ["Totobird Creations"]
 keywords      = ["unsafe", "mut", "library"]
-categories    = ["algorithms", ""]
+categories    = ["algorithms"]
 
 homepage      = "https://crates.io/crates/pholib"
 documentation = "https://docs.rs/pholib"
