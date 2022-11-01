@@ -18,7 +18,8 @@ use std::cell::UnsafeCell;
 /// # Warning
 /// 
 /// * This structure is not thread safe in most cases.
-/// * You are responsible for preventing data races.
+/// * You are responsible for preventing data races and undefined behaviour.
+/// * IN MOST CASES THIS SHOULD NOT BE USED DUE TO THE UNPREDICTABLE AND DANGEROUS NATURE OF THIS SYSTEM.
 /// 
 /// # Examples
 /// 
