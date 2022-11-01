@@ -1,9 +1,15 @@
 [package]
-name = "my-project"
-version = "0.1.0"
-authors = ["runner"]
-edition = "2021"
+name          = "pholib"
+description   = "Potentially helpful objects library, because why not."
+version       = "0.1.0"
+authors       = ["Totobird Creations"]
+keywords      = ["unsafe", "mut", "library"]
+categories    = ["algorithms", ""]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+homepage      = "https://crates.io/crates/pholib"
+documentation = "https://docs.rs/pholib"
+repository    = "https://github.com/Totobird-Creations/Rust-PhoLib"
+readme        = "README.md"
+license       = "MIT"
 
-[dependencies]
+edition       = "2021"
