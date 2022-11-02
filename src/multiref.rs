@@ -25,10 +25,10 @@ use std::cell::UnsafeCell;
 /// 
 /// ```
 /// use pholib::MultiRef;
-/// let multiref = unsafe {MultiRef::new(10)};
+/// let multiref = MultiRef::new(10);
 /// 
-/// let a = multiref.get_ref();
-/// let b = multiref.get_mut();
+/// let a = unsafe {multiref.get_ref()};
+/// let b = unsafe {multiref.get_mut()};
 /// assert_eq!(*a, 10);
 /// assert_eq!(*b, 10);
 /// 
@@ -45,20 +45,20 @@ use std::cell::UnsafeCell;
 ///     pub a : i32,
 ///     pub b : bool
 /// }
-/// let multiref = unsafe {MultiRef::new(
+/// let multiref = MultiRef::new(
 ///     Test {
 ///         a : 1,
 ///         b : false
 ///     }
-/// )};
+/// );
 /// 
-/// let i = multiref.get_ref();
+/// let i = unsafe {multiref.get_ref()};
 /// assert_eq!((*i).a, 1);
 /// assert_eq!((*i).b, false);
 /// 
-/// let x = multiref.get_mut();
-/// let y = multiref.get_mut();
-/// let z = multiref.get_mut();
+/// let x = unsafe {multiref.get_mut()};
+/// let y = unsafe {multiref.get_mut()};
+/// let z = unsafe {multiref.get_mut()};
 /// (*x).a += 10;
 /// (*y).b = true;
 /// (*z).a += 7;
@@ -89,10 +89,10 @@ impl<'l, T> MultiRef<T> {
     /// 
     /// ```
     /// use pholib::MultiRef;
-    /// let multiref = unsafe {MultiRef::new(10)};
+    /// let multiref = MultiRef::new(10);
     /// ```
     /// 
-    pub unsafe fn new(object : T) -> MultiRef<T> {
+    pub fn new(object : T) -> MultiRef<T> {
         return MultiRef(object.into())
     }
 
@@ -108,25 +108,25 @@ impl<'l, T> MultiRef<T> {
     /// Basic
     /// ```
     /// use pholib::MultiRef;
-    /// let multiref = unsafe {MultiRef::new(10)};
+    /// let multiref = MultiRef::new(10);
     /// 
-    /// let i = multiref.get_ref();
+    /// let i = unsafe {multiref.get_ref()};
     /// assert_eq!(*i, 10);
     /// ```
     ///
     /// Multiple immutable references.
     /// ```
     /// use pholib::MultiRef;
-    /// let multiref = unsafe {MultiRef::new(10)};
+    /// let multiref = MultiRef::new(10);
     /// 
-    /// let a = multiref.get_ref();
-    /// let b = multiref.get_ref();
+    /// let a = unsafe {multiref.get_ref()};
+    /// let b = unsafe {multiref.get_ref()};
     /// assert_eq!(*a, 10);
     /// assert_eq!(*b, 10);
     /// ```
     /// 
-    pub fn get_ref(&self) -> &T {
-        return unsafe {& *(&self.0).get()};
+    pub unsafe fn get_ref(&self) -> &T {
+        return & *(&self.0).get();
     }
 
     /// Get a mutable reference to the wrapped value.
@@ -141,10 +141,10 @@ impl<'l, T> MultiRef<T> {
     /// Basic
     /// ```
     /// use pholib::MultiRef;
-    /// let multiref = unsafe {MultiRef::new(10)};
+    /// let multiref = MultiRef::new(10);
     /// 
-    /// let a = multiref.get_mut();
-    /// let b = multiref.get_mut();
+    /// let a = unsafe {multiref.get_mut()};
+    /// let b = unsafe {multiref.get_mut()};
     /// assert_eq!(*a, 10);
     /// assert_eq!(*b, 10);
     /// 
@@ -160,11 +160,11 @@ impl<'l, T> MultiRef<T> {
     /// Multiple references.
     /// ```
     /// use pholib::MultiRef;
-    /// let multiref = unsafe {MultiRef::new(10)};
+    /// let multiref = MultiRef::new(10);
     /// 
-    /// let i = multiref.get_ref();
-    /// let a = multiref.get_mut();
-    /// let b = multiref.get_mut();
+    /// let i = unsafe {multiref.get_ref()};
+    /// let a = unsafe {multiref.get_mut()};
+    /// let b = unsafe {multiref.get_mut()};
     /// assert_eq!(*i, 10);
     /// assert_eq!(*a, 10);
     /// assert_eq!(*b, 10);
@@ -180,8 +180,8 @@ impl<'l, T> MultiRef<T> {
     /// assert_eq!(*b, 13);
     /// ```
     ///
-    pub fn get_mut(&self) -> &mut T {
-        return unsafe {&mut *(&self.0).get()};
+    pub unsafe fn get_mut(&self) -> &mut T {
+        return &mut *(&self.0).get();
     }
 
     /// Return the wrapped value and drop the `MultiRef`.
@@ -201,10 +201,10 @@ impl<'l, T> MultiRef<T> {
     ///
     /// ```
     /// use pholib::MultiRef;
-    /// let multiref = unsafe {MultiRef::new(10)};
+    /// let multiref = MultiRef::new(10);
     /// 
-    /// let a = multiref.get_mut();
-    /// let b = multiref.get_mut();
+    /// let a = unsafe {multiref.get_mut()};
+    /// let b = unsafe {multiref.get_mut()};
     /// *a += 1;
     /// *b += 2;
     /// assert_eq!(multiref.unwrap(), 13);
@@ -228,19 +228,19 @@ mod test {
     use std::thread;
 
     #[test]
-    fn multiref() {
-        let multiref = unsafe {MultiRef::new(10)};
+    fn multiref() {unsafe {
+        let multiref = MultiRef::new(10);
 
         let a = multiref.get_mut();
         let b = multiref.get_mut();
         *a += 1;
         *b += 2;
         assert_eq!(multiref.unwrap(), 13);
-    }
+    }}
 
     #[test]
-    fn immut_and_mut() {
-        let multiref = unsafe {MultiRef::new(10)};
+    fn immut_and_mut() {unsafe {
+        let multiref = MultiRef::new(10);
 
         let i = multiref.get_ref();
         assert_eq!(*i, 10);
@@ -251,7 +251,7 @@ mod test {
         *b += 2;
         assert_eq!(*i, 13);
         assert_eq!(multiref.unwrap(), 13);
-    }
+    }}
 
     struct Test {
         pub a : i32,
@@ -259,13 +259,13 @@ mod test {
     }
     
     #[test]
-    fn struct_mut() {
-        let multiref = unsafe {MultiRef::new(
+    fn struct_mut() {unsafe {
+        let multiref = MultiRef::new(
             Test {
                 a : 1,
                 b : false
             }
-        )};
+        );
 
         let x = multiref.get_mut();
         let y = multiref.get_mut();
@@ -277,16 +277,16 @@ mod test {
         let unwrapped = multiref.unwrap();
         assert_eq!(unwrapped.a, 18);
         assert_eq!(unwrapped.b, true);
-    }
+    }}
     
     #[test]
-    fn struct_immut_and_mut() {
-        let multiref = unsafe {MultiRef::new(
+    fn struct_immut_and_mut() {unsafe {
+        let multiref = MultiRef::new(
             Test {
                 a : 1,
                 b : false
             }
-        )};
+        );
 
         let i = multiref.get_ref();
         assert_eq!((*i).a, 1);
@@ -304,17 +304,17 @@ mod test {
         let unwrapped = multiref.unwrap();
         assert_eq!(unwrapped.a, 18);
         assert_eq!(unwrapped.b, true);
-    }
+    }}
 
     // THIS IS, FOR THE MOST PART, A TERRIBLE IDEA. IF YOU DO THIS, MAKE SURE YOU KNOW WHAT YOU'RE DOING.
     #[test]
-    fn threads() {
+    fn threads() {unsafe {
         let a = 10;
         let b = 10;
         let c = 100;
         let d = 1;
 
-        let multiref = unsafe {MultiRef::new(a)};
+        let multiref = MultiRef::new(a);
 
         for _ in 0..b {
             thread::scope(|scope| {
@@ -328,6 +328,6 @@ mod test {
         }
 
         assert_eq!(multiref.unwrap(), a + b * c * d);
-    }
+    }}
 
 }
